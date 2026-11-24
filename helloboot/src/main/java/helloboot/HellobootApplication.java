@@ -1,16 +1,14 @@
 package helloboot;
 
-import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.apache.catalina.startup.Tomcat;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.tomcat.servlet.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServer;
-import org.springframework.boot.web.servlet.ServletContextInitializer;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 
 import java.io.IOException;
 
@@ -25,14 +23,20 @@ public class HellobootApplication {
 						// 2. service 메서드는 요청, 응답 값을 파라미터로 받아서 전달되서 이 두가지를 이용하면 웹 기능을 만들 수 있음
 						@Override
 						protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-							resp.setStatus(200);
-							resp.setHeader("Content-Type","text/plain");
-							resp.getWriter().println("Hello Servlet");
+
+							helloSpringRes(resp);
+
 						}
 					}).addMapping("/hello"); // 서블릿과 매핑할 경로
         });
 		webServer.start();
 	}
 
+	// 응답 메서드
+	private static void helloSpringRes(HttpServletResponse resp) throws IOException {
+		resp.setStatus(HttpStatus.OK.value());
+		resp.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE);
+		resp.getWriter().println("Hello Servlet");
+	}
 }
 
