@@ -24,8 +24,11 @@ public class HellobootApplication {
 						@Override
 						protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-							helloSpringRes(resp);
+							String name = req.getParameter("name");
 
+
+							// 응답
+							helloSpringRes(resp, name);
 						}
 					}).addMapping("/hello"); // 서블릿과 매핑할 경로
         });
@@ -33,10 +36,10 @@ public class HellobootApplication {
 	}
 
 	// 응답 메서드
-	private static void helloSpringRes(HttpServletResponse resp) throws IOException {
+	private static void helloSpringRes(HttpServletResponse resp, String name) throws IOException {
 		resp.setStatus(HttpStatus.OK.value());
 		resp.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE);
-		resp.getWriter().println("Hello Servlet");
+		resp.getWriter().println("Hello Servlet" + name);
 	}
 }
 
