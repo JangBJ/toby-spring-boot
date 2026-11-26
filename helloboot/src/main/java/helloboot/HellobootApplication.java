@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.boot.tomcat.servlet.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServer;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
@@ -23,12 +24,21 @@ public class HellobootApplication {
 						// 2. service 메서드는 요청, 응답 값을 파라미터로 받아서 전달되서 이 두가지를 이용하면 웹 기능을 만들 수 있음
 						@Override
 						protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+							// frontController의 기능인 공통 처리
+							if(req.getRequestURI().equals("/hello")
+									&& req.getMethod().equals(HttpMethod.GET.name())){
+								String name = req.getParameter("name");
+								// 응답
+								helloSpringRes(resp, name);
+							}
+							else if(req.getRequestURI().equals("/user")){
+								//
+							}
+							else {
+								resp.setStatus(HttpStatus.NOT_FOUND.value());
+							}
 
-							String name = req.getParameter("name");
 
-
-							// 응답
-							helloSpringRes(resp, name);
 						}
 					}).addMapping("/hello"); // 서블릿과 매핑할 경로
         });
